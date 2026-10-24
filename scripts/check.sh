@@ -79,8 +79,8 @@ for (const method of expected) {
 	if (!block || !block[1].trim() || /unknown_method/.test(block[1]))
 		throw new Error(`RPC method ${method} has no concrete backend case`);
 }
-if (!/params:\s*\[\s*'lan_network',\s*'listen_port',\s*'boot_enabled'\s*\]/.test(rpcSource))
-	throw new Error('settings RPC parameters do not include boot_enabled');
+if (!/params:\s*\[\s*'lan_network',\s*'listen_port',\s*'boot_enabled',\s*'clash_api_enabled',\s*'clash_api_port',\s*'clash_api_secret'\s*\]/.test(rpcSource))
+	throw new Error('settings RPC parameters do not include Clash API settings');
 NODE
 
 redacted=$(printf '%s\n' \
@@ -139,6 +139,7 @@ export PATH
 stage_reset_tree "$reset_fixture/old/etc/honk" "$reset_fixture/new/etc/honk" "$reset_fixture/system.dae" "$reset_fixture/default.dae"
 test "$(cat "$reset_fixture/new/etc/honk/config.dae")" = 'default config'
 test "$(cat "$reset_fixture/new/etc/honk/system.dae")" = 'system config'
+test "$(ls -ld "$reset_fixture/new/etc/honk/system.dae" | awk '{print substr($1, 1, 10)}')" = '-rw-------'
 test "$(cat "$reset_fixture/new/etc/honk/state/honk.db")" = 'administrator-preserved'
 test ! -e "$reset_fixture/new/etc/honk/extra.dae"
 rm -rf "$reset_fixture"
@@ -172,7 +173,7 @@ grep -Fq 'UPDATE_LOCK_OWNED=1' honk/files/update.sh
 grep -Fq 'checking_feed' honk/files/job.sh
 
 
-grep -Fq "honk.settings(networkSelect.value, port, bootEnabledInput.checked)" luci-app-honk/htdocs/luci-static/resources/view/honk/overview.js
+grep -Fq "honk.settings(networkSelect.value, port, bootEnabledInput.checked, clashEnabledInput.checked, clashPort, clashSecret)" luci-app-honk/htdocs/luci-static/resources/view/honk/overview.js
 
 git diff --check
 echo 'Static checks passed.'
