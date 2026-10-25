@@ -94,10 +94,20 @@ return view.extend({
 				message.textContent = _('Choose a LAN network and a port from 1024 to 65535.');
 				return;
 			}
-			if (!Number.isInteger(clashPort) || clashPort < 1024 || clashPort > 65535 ||
-				clashEnabledInput.checked && (clashPort === port || !(data.status && data.status.clash_api_secret_set) && !clashSecret ||
-				!!clashSecret && !/^[A-Za-z0-9_-]{16,128}$/.test(clashSecret))) {
-				message.textContent = _('Choose a different Clash API port and enter a valid secret.');
+			if (!Number.isInteger(clashPort) || clashPort < 1024 || clashPort > 65535) {
+				message.textContent = _('Clash API port must be between 1024 and 65535.');
+				return;
+			}
+			if (clashEnabledInput.checked && clashPort === port) {
+				message.textContent = _('The Clash API port must differ from the listen port.');
+				return;
+			}
+			if (clashEnabledInput.checked && !(data.status && data.status.clash_api_secret_set) && !clashSecret) {
+				message.textContent = _('A secret is required when enabling Clash API.');
+				return;
+			}
+			if (clashEnabledInput.checked && clashSecret && !/^[A-Za-z0-9_-]{16,128}$/.test(clashSecret)) {
+				message.textContent = _('The secret must be 16-128 letters, numbers, underscores or hyphens.');
 				return;
 			}
 

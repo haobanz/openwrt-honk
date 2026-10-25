@@ -1301,3 +1301,15 @@ msgstr "Clash API 端口已被占用。"
 
 msgid "Enter a different Clash API port and a secret of 16–128 letters, numbers, underscores or hyphens."
 msgstr "请设置不同的 Clash API 端口，以及 16～128 位英文字母、数字、下划线或短横线组成的密钥。"
+
+msgid "Clash API port must be between 1024 and 65535."
+msgstr "Clash API 端口需要在 1024～65535 之间。"
+
+msgid "The Clash API port must differ from the listen port."
+msgstr "Clash API 端口不能和监听端口相同。"
+
+msgid "A secret is required when enabling Clash API."
+msgstr "启用 Clash API 时需要设置密钥。"
+
+msgid "The secret must be 16-128 letters, numbers, underscores or hyphens."
+msgstr "密钥需要 16～128 位，只能包含字母、数字、下划线或短横线。"
