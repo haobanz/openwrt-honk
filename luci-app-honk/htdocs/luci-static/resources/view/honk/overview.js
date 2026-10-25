@@ -211,7 +211,8 @@ return view.extend({
 			const bootEnabledInput = E('input', { 'type': 'checkbox', 'name': 'boot_enabled', 'id': 'honk-boot-enabled' });
 			const clashEnabledInput = E('input', { 'type': 'checkbox', 'name': 'clash_api_enabled', 'id': 'honk-clash-enabled' });
 			const clashPortInput = E('input', { 'class': 'cbi-input-text', 'type': 'number', 'name': 'clash_api_port', 'id': 'honk-clash-port', 'min': '1024', 'max': '65535', 'step': '1' });
-			const clashSecretInput = E('input', { 'class': 'cbi-input-password', 'type': 'password', 'name': 'clash_api_secret', 'id': 'honk-clash-secret', 'autocomplete': 'new-password' });
+			const clashSecretInput = E('input', { 'class': 'cbi-input-password', 'type': 'password', 'name': 'clash_api_secret', 'id': 'honk-clash-secret', 'autocomplete': 'new-password', 'readonly': 'readonly' });
+			clashSecretInput.addEventListener('focus', function() { clashSecretInput.removeAttribute('readonly'); });
 			const message = E('p', { 'class': 'honk-status-msg', 'role': 'status' }, '');
 			const save = E('button', { 'class': 'cbi-button cbi-button-positive', 'type': 'submit' }, _('Save service settings'));
 
