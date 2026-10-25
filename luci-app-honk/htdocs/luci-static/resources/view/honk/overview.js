@@ -5,6 +5,7 @@
 'require poll';
 'require view';
 'require view.honk.rpc as honk';
+'require uci';
 
 function getNetworkNames(networks) {
 	if (!networks)
@@ -81,9 +82,10 @@ return view.extend({
 	load: function() {
 		return Promise.all([
 			honk.status().then(function(status) { return { status: status }; }).catch(function(error) { return { error: error.message || String(error) }; }),
-			network.getNetworks().then(getNetworkNames).then(function(networks) { return { networks: networks }; }).catch(function() { return { networks: [] }; })
+			network.getNetworks().then(getNetworkNames).then(function(networks) { return { networks: networks }; }).catch(function() { return { networks: [] }; }),
+			uci.load('honk').then(function() { return { clash_secret: uci.get('honk', 'main', 'clash_api_secret') || '' }; }).catch(function() { return { clash_secret: '' }; })
 		]).then(function(results) {
-			return Object.assign({}, results[0], results[1]);
+			return Object.assign({}, results[0], results[1], results[2]);
 		});
 	},
 
@@ -94,6 +96,7 @@ return view.extend({
 		const actionMessage = E('p', { 'class': 'honk-status-msg', 'role': 'status' }, '');
 		const setupArea = E('div');
 		let currentStatus = data.status;
+		const clashSecret = data.clash_secret || '';
 		let busy = false;
 		let setupBusy = false;
 		let settingsBusy = false;
@@ -128,7 +131,7 @@ return view.extend({
 				'type': webUi ? null : 'button',
 				'disabled': webUi ? null : true
 			}, _('Open Doona'));
-			const clashUi = honk.localClashUi(status);
+			const clashUi = honk.localClashUi(status, clashSecret);
 			const openClash = E(clashUi ? 'a' : 'button', {
 				'class': 'cbi-button cbi-button-action',
 				'href': clashUi || null,
