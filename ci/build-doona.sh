@@ -48,7 +48,11 @@ for file in LICENSE NOTICE CHANGELOG.md README.md; do
 	test -f "$WORK_DIR/source/$file"
 	cp "$WORK_DIR/source/$file" "$STAGE/$file"
 done
-node tools/notices.mjs "$STAGE"
+if test -f dist/.vite/bundled-packages.json; then
+	node tools/notices.mjs "$STAGE" dist/.vite/bundled-packages.json
+else
+	node tools/notices.mjs "$STAGE"
+fi
 test -s "$STAGE/THIRD-PARTY-NOTICES.txt"
 test -d "$STAGE/LICENSES"
 test -n "$(find "$STAGE/LICENSES" -type f -print -quit)"
